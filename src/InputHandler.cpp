@@ -1,6 +1,4 @@
-#include <unistd.h>
-#include <errno.h>
-#include <iostream>
+#include <thread>
 #include "InputHandler.h"
 
 int InputHandler::getX()
@@ -13,72 +11,84 @@ int InputHandler::getY()
     return _y.load();
 }
 
-void InputHandler::readInput()
+void InputHandler::readEventLoop(std::atomic_bool& canceled)
 {
-    int bytesRead = read(STDIN_FILENO, _buffer, sizeof(_buffer) - 1);
-    if (bytesRead < 0 && errno != EAGAIN)
+    SDL_Event event;
+    while (!canceled.load())
     {
-        perror("read");
-        return;
-    }
+        auto success = SDL_WaitEventTimeout(&event, 3000);
+        if (success != 1)
+        {
+            auto err = SDL_GetError();
+            if (!err || *err == '\0')
+            {
+                continue;
+            }
 
-    if (bytesRead <= 0)
+            throw std::runtime_error("ERROR: " + std::string(err));
+        }
+
+        processEvent(event);
+    }
+}
+
+void InputHandler::processEvent(SDL_Event& event)
+{
+    switch (event.type)
     {
-        return;
+        case SDL_KEYDOWN:
+            keyDown(event.key);
+            break;
+        case SDL_KEYUP:
+            keyUp(event.key);
+            break;
+        case SDL_QUIT:
+            break;
     }
+}
 
-    processInput(bytesRead);
+void InputHandler::keyUp(SDL_KeyboardEvent& event)
+{
+    auto keyCode = event.keysym.sym;
+    switch (keyCode)
+    {
+        case SDLK_LEFT:
+            _x.store(0);
+            break;
+        case SDLK_RIGHT:
+            _x.store(0);
+            break;
+        case SDLK_UP:
+            _y.store(0);
+            break;
+        case SDLK_DOWN:
+            _y.store(0);
+            break;
+    }
+}
+
+void InputHandler::keyDown(SDL_KeyboardEvent& event)
+{
+    auto keyCode = event.keysym.sym;
+    switch (keyCode)
+    {
+        case SDLK_LEFT:
+            _x.store(-1);
+            break;
+        case SDLK_RIGHT:
+            _x.store(1);
+            break;
+        case SDLK_UP:
+            _y.store(1);
+            break;
+        case SDLK_DOWN:
+            _y.store(-1);
+            break;
+    }
 }
 
 void InputHandler::clearInput()
 {
     _x.store(0);
     _y.store(0);
-}
-
-void InputHandler::processInput(int length)
-{
-    bool in_sequence = false;
-    bool expect_arrow = false;
-    for (int i = 0; i < length; i++)
-    {
-        char c = _buffer[i];
-        if (c == '\x1b')
-        {
-            in_sequence = true;
-            expect_arrow = false;
-        }
-        else if (in_sequence && c == '[')
-        {
-            expect_arrow = true;
-        }
-        else
-        {
-            if (expect_arrow)
-            {
-                switch (c)
-                {
-                case 'A':
-                    _y.store(1);
-                    break;
-                case 'B':
-                    _y.store(-1);
-                    break;
-                case 'C':
-                    _x.store(1);
-                    break;
-                case 'D':
-                    _x.store(-1);
-                    break;
-                default:
-                    in_sequence = false;
-                    expect_arrow = false;
-                    continue;
-                }
-            }
-
-            in_sequence = false;
-            expect_arrow = false;
-        }
-    }
 }

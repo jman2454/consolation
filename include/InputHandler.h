@@ -1,30 +1,26 @@
 #include <unistd.h>
 #include <errno.h>
 #include <iostream>
+#include "SDL2/SDL.h"
 
 class InputHandler
 {
 public:
     int getX();
     int getY();
-    void readInput();
     void clearInput();
+    void readEventLoop(std::atomic_bool& canceled);
 
-    InputHandler()
-    {
-        clearInput();
-    }
-
-    ~InputHandler()
-    {
-        delete[] _buffer;
-    }
+    InputHandler() : 
+    _x(0),
+    _y(0)
+    { }
 
 private:
-    char *_buffer = new char[256];
     std::atomic_int32_t _y;
     std::atomic_int32_t _x;
-    int _version = 0;
 
-    void processInput(int length);
+    void processEvent(SDL_Event& event);
+    void keyDown(SDL_KeyboardEvent& event);
+    void keyUp(SDL_KeyboardEvent& event);
 };

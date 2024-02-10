@@ -20,9 +20,9 @@ void Player::update(std::chrono::milliseconds delta)
     }
 }
 
-void Player::draw(Canvas& canvas)
+void Player::draw(std::shared_ptr<Canvas> canvas)
 {
-    canvas.fillRect('O', getX(), getY(), 1, 1);
+    canvas->fillRect('O', getX(), getY(), 1, 1);
 }
 
 void Player::vertical(float d) 
