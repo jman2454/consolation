@@ -2,3 +2,7 @@ bin/
 *.dSYM
 .vscode
 .DS_Store
+CMakeCache.txt
+*.cmake
+Makefile
+CMakeFiles/
