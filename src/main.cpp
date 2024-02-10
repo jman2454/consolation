@@ -80,7 +80,7 @@ int main()
                     last_player_move = now;
                 }
 
-                if (player_dy != 0 && (player->getY() == 0 || player_dy > 0))
+                if (player->getY() == 0 && player_dy > 0)
                 {
                     // n cells in a frame
                     player->vertical(1.5 / frame_ms);
