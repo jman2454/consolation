@@ -2,9 +2,8 @@
 
 #include "Player.h"
 
-void Player::update(std::chrono::milliseconds delta)
+void Player::update(int ms)
 {
-    auto ms = delta.count();
     setX((float) getX() + ms * _dx);
     setY((float) getY() + ms * _dy);
 
@@ -22,7 +21,8 @@ void Player::update(std::chrono::milliseconds delta)
 
 void Player::draw(std::shared_ptr<Canvas> canvas)
 {
-    canvas->fillRect('O', getX(), getY(), 1, 1);
+    int factor = 10;
+    canvas->fillRect('O', std::max(getX() - (float) factor + 1.0, 0.0), std::max(getY() + (float) factor - 1.0, 0.0), factor, factor);
 }
 
 void Player::vertical(float d) 

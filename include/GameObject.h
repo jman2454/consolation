@@ -1,3 +1,5 @@
+#pragma once
+
 #include <chrono>
 #include "Canvas.h"
 #include "Window.h"
@@ -5,7 +7,7 @@
 class GameObject 
 {
     public:
-        virtual void update(std::chrono::milliseconds delta) = 0;
+        virtual void update(int ms) = 0;
         virtual void draw(std::shared_ptr<Canvas> canvas) = 0;
 
         GameObject(std::shared_ptr<Window> window, int x, int y) : _window(window), _x(x), _y(y) { }
