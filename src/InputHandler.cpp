@@ -11,24 +11,36 @@ int InputHandler::getY()
     return _y.load();
 }
 
+bool checkError()
+{
+    auto err = SDL_GetError();
+    if (!err || *err == '\0')
+    {
+        // no events, continue
+        return false;
+    }
+
+    throw std::runtime_error("ERROR: " + std::string(err));
+}
+
 void InputHandler::readEventLoop(std::atomic_bool& canceled)
 {
     SDL_Event event;
     while (!canceled.load())
     {
         auto success = SDL_WaitEventTimeout(&event, 3000);
-        if (success != 1)
+        if (success != 1 && !checkError())
         {
-            auto err = SDL_GetError();
-            if (!err || *err == '\0')
-            {
-                continue;
-            }
-
-            throw std::runtime_error("ERROR: " + std::string(err));
+            continue;
         }
 
         processEvent(event);
+        while (SDL_PollEvent(&event))
+        {
+            processEvent(event);
+        }
+
+        checkError();
     }
 }
 

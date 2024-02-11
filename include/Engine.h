@@ -10,13 +10,12 @@ class Engine
             _frame_length_ms(16),
             _started(false),
             _canceled(false)
-        {
-
-        }
+        { }
 
         ~Engine()
         {
             stop();
+            SDL_Quit();
         }
 
         void run()
@@ -102,25 +101,20 @@ class Engine
 
                     int player_dx = _input->getX();
                     int player_dy = _input->getY();
+                    if (player_dx != 0 && (player->getX() != _canvas->getWidth() - 1 || player_dx < 0) && (player->getX() > 0 || player_dx > 0))
+                    {
+                        player->horizontal(1.3 * player_dx / frame_ms);
+                        last_player_move = now;
+                    }
 
-                    // if (now - last_player_move > std::chrono::milliseconds(5))
-                    // {
-                        if (player_dx != 0 && (player->getX() != _canvas->getWidth() - 1 || player_dx < 0) && (player->getX() > 0 || player_dx > 0))
-                        {
-                            player->horizontal(1.5 * player_dx / frame_ms);
-                            last_player_move = now;
-                        }
-
-                        if (player->getY() == 0 && player_dy > 0)
-                        {
-                            // n cells in a frame
-                            player->vertical(1.5 / frame_ms);
-                            last_player_move = now;
-                        }
-                    // }
+                    if (player->getY() == 0 && player_dy > 0)
+                    {
+                        // n cells in a frame
+                        player->vertical(1.3 / frame_ms);
+                        last_player_move = now;
+                    }
 
                     _canvas->clear();
-
                     _canvas->fillRect('|', pos, _canvas->getHeight() - 1, chunk_size, _canvas->getHeight());
                     for (auto& ptr : objs)
                     {

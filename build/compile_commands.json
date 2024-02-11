@@ -1,0 +1,26 @@
+[
+{
+  "directory": "/Users/jamesmeyers/Dev/console_game/build",
+  "command": "/usr/bin/clang++  -I/Users/jamesmeyers/Dev/console_game/include -I/opt/homebrew/include -isystem /opt/homebrew/include/SDL2 -g -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -o CMakeFiles/game.dir/src/Canvas.cpp.o -c /Users/jamesmeyers/Dev/console_game/src/Canvas.cpp",
+  "file": "/Users/jamesmeyers/Dev/console_game/src/Canvas.cpp",
+  "output": "CMakeFiles/game.dir/src/Canvas.cpp.o"
+},
+{
+  "directory": "/Users/jamesmeyers/Dev/console_game/build",
+  "command": "/usr/bin/clang++  -I/Users/jamesmeyers/Dev/console_game/include -I/opt/homebrew/include -isystem /opt/homebrew/include/SDL2 -g -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -o CMakeFiles/game.dir/src/InputHandler.cpp.o -c /Users/jamesmeyers/Dev/console_game/src/InputHandler.cpp",
+  "file": "/Users/jamesmeyers/Dev/console_game/src/InputHandler.cpp",
+  "output": "CMakeFiles/game.dir/src/InputHandler.cpp.o"
+},
+{
+  "directory": "/Users/jamesmeyers/Dev/console_game/build",
+  "command": "/usr/bin/clang++  -I/Users/jamesmeyers/Dev/console_game/include -I/opt/homebrew/include -isystem /opt/homebrew/include/SDL2 -g -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -o CMakeFiles/game.dir/src/Player.cpp.o -c /Users/jamesmeyers/Dev/console_game/src/Player.cpp",
+  "file": "/Users/jamesmeyers/Dev/console_game/src/Player.cpp",
+  "output": "CMakeFiles/game.dir/src/Player.cpp.o"
+},
+{
+  "directory": "/Users/jamesmeyers/Dev/console_game/build",
+  "command": "/usr/bin/clang++  -I/Users/jamesmeyers/Dev/console_game/include -I/opt/homebrew/include -isystem /opt/homebrew/include/SDL2 -g -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -o CMakeFiles/game.dir/src/main.cpp.o -c /Users/jamesmeyers/Dev/console_game/src/main.cpp",
+  "file": "/Users/jamesmeyers/Dev/console_game/src/main.cpp",
+  "output": "CMakeFiles/game.dir/src/main.cpp.o"
+}
+]
