@@ -7,8 +7,8 @@
 class Engine
 {
     public:
-        Engine(int frame_ms = 16) : 
-            _frame_length_ms(16),
+        Engine(float frame_ms = 16.57) : 
+            _frame_length_ns(frame_ms * 1000000),
             _started(false),
             _canceled(false)
         { }
@@ -54,7 +54,7 @@ class Engine
         }
 
     private:
-        int _frame_length_ms;
+        int _frame_length_ns;
         std::atomic_bool _started;
         std::atomic_bool _canceled;
         std::thread _gameThread;
@@ -67,7 +67,7 @@ class Engine
             auto last_frame = start;
             auto last_loop = start;
 
-            std::chrono::milliseconds frame_length(16);
+            std::chrono::nanoseconds frame_length(_frame_length_ns);
             std::chrono::nanoseconds elapsed{0};
             std::chrono::seconds duration{5};
             PlayerScene scene(_canvas);

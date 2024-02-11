@@ -21,8 +21,8 @@ void Player::update(int ms)
 
 void Player::draw(std::shared_ptr<Canvas> canvas)
 {
-    int factor = 10;
-    canvas->fillRect('O', std::max(getX() - (float) factor + 1.0, 0.0), std::max(getY() + (float) factor - 1.0, 0.0), factor, factor);
+    int size = 10;
+    canvas->fillRect('O', std::max(getX() - (float) size + 1.0, 0.0), std::max(getY() + (float) size - 1.0, 0.0), size, size);
 }
 
 void Player::vertical(float d) 
