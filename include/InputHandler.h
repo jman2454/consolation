@@ -10,8 +10,8 @@ class InputHandler
 public:
     int getX();
     int getY();
-    void clearInput();
-    void readEventLoop(std::atomic_bool& canceled);
+    void keyDown(SDL_KeyboardEvent& event);
+    void keyUp(SDL_KeyboardEvent& event);
 
     InputHandler() : 
     _x(0),
@@ -21,8 +21,4 @@ public:
 private:
     std::atomic_int32_t _y;
     std::atomic_int32_t _x;
-
-    void processEvent(SDL_Event& event);
-    void keyDown(SDL_KeyboardEvent& event);
-    void keyUp(SDL_KeyboardEvent& event);
 };

@@ -4,11 +4,13 @@
 #include "Player.h"
 #include "PlayerScene.h"
 
+#define NS_PER_MS 1000000
+
 class Engine
 {
     public:
         Engine(float frame_ms = 16.57) : 
-            _frame_length_ns(frame_ms * 1000000),
+            _frame_length_ns(frame_ms * NS_PER_MS),
             _started(false),
             _canceled(false)
         { }
@@ -33,7 +35,7 @@ class Engine
             }
 
             _gameThread = std::move(std::thread([this](){ this->gameLoop(); }));
-            _input->readEventLoop(_canceled);
+            eventLoop();
         }
 
         void stop()
@@ -53,6 +55,8 @@ class Engine
             _gameThread.join();
         }
 
+        void eventLoop();
+
     private:
         int _frame_length_ns;
         std::atomic_bool _started;
@@ -61,30 +65,30 @@ class Engine
         std::shared_ptr<Canvas> _canvas;
         std::shared_ptr<InputHandler> _input;
 
-        void gameLoop()
-        {    
-            auto start = std::chrono::steady_clock::now();
-            auto last_frame = start;
-            auto last_loop = start;
+        void processEvent(SDL_Event& event);
 
+        void gameLoop()
+        {
+            auto prev_start = std::chrono::steady_clock::now();
             std::chrono::nanoseconds frame_length(_frame_length_ns);
             std::chrono::nanoseconds elapsed{0};
             std::chrono::seconds duration{5};
             PlayerScene scene(_canvas);
-
+            
             while (elapsed < duration)
             {
                 auto now = std::chrono::steady_clock::now();
-                auto delta = now - last_loop;
+                std::chrono::nanoseconds delta = now - prev_start;
+                prev_start = now;
                 elapsed += delta;
-                last_loop = now;
-
-                auto delta_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_frame);
-                if (delta_ms >= frame_length)
+                
+                scene.update(_input, std::chrono::duration_cast<std::chrono::milliseconds>(delta).count());
+                scene.draw(_canvas);
+                
+                auto time_taken = std::chrono::steady_clock::now() - now;
+                if (time_taken < frame_length)
                 {
-                    scene.update(_input, delta_ms.count());
-                    scene.draw(_canvas);
-                    last_frame = now;
+                    std::this_thread::sleep_for(frame_length - time_taken);
                 }
             }
 
